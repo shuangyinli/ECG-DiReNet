@@ -55,7 +55,7 @@ class DownsamplingBlock(nn.Module):
 
     def forward(self, x,t, h=None):
         initial_x = x
-        t = self.time_emb(t) #.repeat(1,1, x.shape[2])
+        t = self.time_emb(t) 
         x = x + t
 
         shortcut = self.conv1(x)
@@ -78,7 +78,6 @@ class UpsamplingBlock(nn.Module):
         super(UpsamplingBlock, self).__init__()
         self.kernel_size = kernel_size
 
-        # CONV 1
         self.pre_shortcut_convs = nn.Conv1d(n_inputs*2, n_shortcut, self.kernel_size, padding="same")
         self.shortcut_convs = nn.Conv1d(n_shortcut, n_shortcut, self.kernel_size, padding="same")
         self.post_shortcut_convs = nn.Conv1d(n_shortcut, n_outputs, self.kernel_size, padding="same")
@@ -107,7 +106,7 @@ class UpsamplingBlock(nn.Module):
     def forward(self, x, h, t):
         x = self.up(x)
         initial_x = x
-        t = self.time_emb(t)  # .repeat(1, 1, x.shape[2])
+        t = self.time_emb(t)  
         x = x + t
         if h is None:
             h = x
@@ -134,7 +133,6 @@ class ECGunetChannels(nn.Module):
         self.kernel_size = kernel_size
         self.number_of_diffusions = number_of_diffusions 
 
-        # Only odd filter kernels allowed
         assert (kernel_size % 2 == 1)
         self.downsampling_blocks = nn.ModuleList()
         self.upsampling_blocks = nn.ModuleList()
@@ -174,8 +172,6 @@ class ECGunetChannels(nn.Module):
 
         self.bottleneck_conv1 = nn.Conv1d(n_channels * 2 ** (self.num_levels - 1),
                                           n_channels * 2 ** (self.num_levels - 1), kernel_size=3, padding="same")
-        #self.bottleneck_conv1_2 = nn.Conv1d(n_channels * 2 ** (self.num_levels - 1),
-        #                                    n_channels * 2 ** (self.num_levels -1), kernel_size=3, padding="same")
         self.bottleneck_conv2 = nn.Conv1d(n_channels * 2 ** (self.num_levels-1),
                                           n_channels * 2 ** (self.num_levels - 1), kernel_size=3, padding="same")
         self.attention_block = SelfAttention(resolution >> (self.num_levels-1),
@@ -199,7 +195,7 @@ class ECGunetChannels(nn.Module):
 
         del shortcuts[-1]
         old_out = out
-        tt = self.time_emb(t)  # [:,None,:].repeat(1, out.shape[1], 1)
+        tt = self.time_emb(t)   
         out = out + tt
         out = self.bottleneck_conv1(out)
         out = self.bottleneck_layer_norm1(out)
@@ -207,7 +203,7 @@ class ECGunetChannels(nn.Module):
         self_attention1 = self.attention_block(out)
         out = self.bottleneck_conv2(self_attention1)
         out = self.bottleneck_layer_norm2(out)
-        out = F.mish(out) + old_out / math.sqrt(2)  # residiual connection normalization
+        out = F.mish(out) + old_out / math.sqrt(2)  
         out = self.upsampling_blocks[0](out, None, t)
 
         for idx, block in enumerate(self.upsampling_blocks[1:]):

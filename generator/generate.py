@@ -221,7 +221,6 @@ if __name__ == "__main__":
 
     data = np.array(fake_list)
     
-    # Post-processing based on 官方.py
     print("Applying post-processing...")
     smoothed_data = np.array([smooth_continuous_outliers(x) for x in tqdm(data, desc="Smoothing data")])
     normalized_data = np.array([Normalization2(x) for x in tqdm(smoothed_data, desc="Normalizing data")])

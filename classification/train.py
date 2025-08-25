@@ -41,24 +41,6 @@ def collate_fn_val(batch):
 
 def discriminative_score_metrics(train_dataset, val_dataset, test_dataset, device, best_model_path, epochs=60,
                                  batch_size=512, lr=5e-3, weight_decay=1e-4, seed=42, checkpoint_path=None,pretrain_path=None):
-    """
-    Calculate discriminative score metrics by training a model on the given datasets.
-
-    Args:
-        train_dataset (Dataset): Training dataset.
-        val_dataset (Dataset): Validation dataset.
-        test_dataset (Dataset): Test dataset.
-        device (torch.device): Device to run the model on (e.g., 'cuda' or 'cpu').
-        best_model_path (str): Path to save the best model.
-        epochs (int, optional): Number of training epochs. Defaults to 60.
-        batch_size (int, optional): Batch size for training and evaluation. Defaults to 512.
-        lr (float, optional): Learning rate for the optimizer. Defaults to 5e-3.
-        weight_decay (float, optional): Weight decay for the optimizer. Defaults to 1e-4.
-        seed (int, optional): Random seed for reproducibility. Defaults to 42.
-        checkpoint_path (str, optional): Path to load a checkpoint. Defaults to None.
-    """
-
-    # Create data loaders
     train_loader = DataLoader(
         train_dataset,
         batch_size=batch_size,
@@ -74,7 +56,7 @@ def discriminative_score_metrics(train_dataset, val_dataset, test_dataset, devic
         shuffle=False,
         num_workers=8,
         pin_memory=True,
-        collate_fn=collate_fn_val  # Use a custom collate function
+        collate_fn=collate_fn_val  
     )
 
     test_loader = DataLoader(
@@ -83,11 +65,9 @@ def discriminative_score_metrics(train_dataset, val_dataset, test_dataset, devic
         shuffle=False,
         num_workers=8,
         pin_memory=True,
-        collate_fn=collate_fn_val  # Use a custom collate function
+        collate_fn=collate_fn_val  
     )
 
-    # Initialize the model
-    # Model parameters
     number_of_diffusions = 1000
     kernel_size = 5
     num_levels = 3
@@ -104,37 +84,29 @@ def discriminative_score_metrics(train_dataset, val_dataset, test_dataset, devic
         load_path=pretrain_path
     ).to(device)
 
-    # Optimizer
     optimizer = optim.AdamW(
-        model.parameters(),  # Only include 'weights' parameters
+        model.parameters(),   
         lr=lr,
         weight_decay=weight_decay,
         betas=(0.8, 0.999)
     )
 
-    # Calculate class weights
     pos_weight = compute_pos_weight(train_dataset)
     pos_weight = pos_weight.to(device)
  
-    # Loss function
     criterion = FocalLoss(alpha=1.2, gamma=2.0, reduction='mean')
 
-    # Learning rate scheduler
     scheduler = ReduceLROnPlateau(optimizer, mode='max', factor=0.75, patience=8, verbose=True, min_lr=1e-5)
 
-    # Initialize best metrics
-    best_auc = float('-inf')  # Best ROC AUC
+    best_auc = float('-inf')   
 
-    # Lists to record losses and learning rates
     train_losses = []
     val_losses = []
     learning_rates = []
 
-    # Training loop
     for epoch in tqdm(range(epochs), desc="Epochs", leave=True):
         print(f"\n===== Epoch {epoch + 1}/{epochs} =====\n")
 
-        # Training phase
         model.train()
         epoch_loss = 0.0
         epoch_correct = 0
@@ -145,45 +117,37 @@ def discriminative_score_metrics(train_dataset, val_dataset, test_dataset, devic
             data, labels = data.to(device, non_blocking=True), labels.to(device, non_blocking=True)
             optimizer.zero_grad()
 
-            outputs = model(data)  # [N, 1], [batch_size, seq_len]
+            outputs = model(data)   
             loss = criterion(outputs.squeeze(-1), labels)
 
-            # Calculate predictions
             preds = (torch.sigmoid(outputs.squeeze(-1)) > 0.5).int()
             correct = (preds == labels.int()).sum().item()
             epoch_correct += correct
             epoch_total += labels.size(0)
 
-            # Backpropagation and optimization
             loss.backward()
             optimizer.step()
 
-            # Accumulate loss
             epoch_loss += loss.item()
 
-            # Update progress bar information (loss and accuracy) in real-time
             current_accuracy = epoch_correct / epoch_total if epoch_total > 0 else 0
             train_progress.set_postfix({
                 'Loss': f"{loss.item():.4f}",
                 'Acc': f"{current_accuracy * 100:.2f}%"
             })
 
-        # Calculate average loss and accuracy for the entire epoch
         avg_epoch_loss = epoch_loss / len(train_loader)
         avg_epoch_acc = epoch_correct / epoch_total if epoch_total > 0 else 0
 
         print(f"Epoch {epoch + 1}/{epochs}, Average Loss: {avg_epoch_loss:.4f}, Average Acc: {avg_epoch_acc * 100:.2f}%")
-        # Record loss and learning rate
         train_losses.append(avg_epoch_loss)
         learning_rates.append(optimizer.param_groups[0]['lr'])
 
         if (epoch + 1) % 1 == 0:
             print(f"\n===== Epoch {epoch + 1}/{epochs} - Validation =====\n")
-            # Evaluate on the validation set
             val_metrics = evaluate_model(model, val_loader, criterion, device, threshold=0.47)
             print_metrics(val_metrics, "Validation set", verbose=True)
 
-            # Update the best model
             if val_metrics['roc_auc'] > best_auc:
                 best_auc = val_metrics['roc_auc']
                 torch.save(model.state_dict(), best_model_path)
@@ -194,26 +158,11 @@ def discriminative_score_metrics(train_dataset, val_dataset, test_dataset, devic
 
     print("\n=== Final Test ===")
     model.load_state_dict(torch.load(best_model_path, map_location=device))
-    # Evaluate on the test set
     test_metrics = evaluate_model(model, test_loader, criterion, device, threshold=0.47)
-    # Print detailed test results
     print_metrics(test_metrics, "Test set", verbose=True)
 
 
 def evaluate_model(model, dataloader, criterion, device, threshold=0.5):
-    """
-    Evaluate the model on the given dataset.
-
-    Args:
-        model (torch.nn.Module): The model to be evaluated.
-        dataloader (DataLoader): DataLoader for the dataset.
-        criterion (torch.nn.Module): Loss function.
-        device (torch.device): Device to run the model on.
-        threshold (float, optional): Threshold for binary classification. Defaults to 0.5.
-
-    Returns:
-        dict: Evaluation metrics including loss, ROC AUC, accuracy, etc.
-    """
     model.eval()
     y_true, y_pred, y_score = [], [], []
     all_csv_names = []
@@ -225,28 +174,23 @@ def evaluate_model(model, dataloader, criterion, device, threshold=0.5):
             data = data.to(device)
             labels = labels.float().to(device)
 
-            # Forward pass
             outputs = model(data)
             loss = criterion(outputs.squeeze(-1), labels)
             total_loss += loss.item() * data.size(0)
 
-            # Calculate probabilities and predictions
             probabilities = torch.sigmoid(outputs.squeeze(-1))
             preds = (probabilities > threshold).int()
 
-            # Collect results
             y_true.extend(labels.cpu().numpy())
             y_pred.extend(preds.cpu().numpy())
             y_score.extend(probabilities.cpu().numpy())
             all_csv_names.extend(csv_names)
 
-    # Aggregate results by patient
     patient_results = defaultdict(lambda: {'scores': [], 'true_label': None})
     for csv_name, true_label, score in zip(all_csv_names, y_true, y_score):
         patient_results[csv_name]['true_label'] = true_label
         patient_results[csv_name]['scores'].append(score)
 
-    # Calculate patient-level metrics
     patient_true = []
     patient_scores = []
     for csv_name, data in patient_results.items():
@@ -255,7 +199,6 @@ def evaluate_model(model, dataloader, criterion, device, threshold=0.5):
 
     patient_pred = [1 if score >= threshold else 0 for score in patient_scores]
 
-    # Calculate metrics
     metrics = {
         'loss': total_loss / len(dataloader.dataset),
         'roc_auc': roc_auc_score(patient_true, patient_scores),
@@ -275,10 +218,8 @@ def evaluate_model(model, dataloader, criterion, device, threshold=0.5):
 
 
 if __name__ == "__main__":
-    # Create an argument parser
     parser = argparse.ArgumentParser(description='Train a discriminative model.')
 
-    # Add arguments
     parser.add_argument('--seed', type=int, default=99, help='Random seed for reproducibility')
     parser.add_argument('--train_paths', nargs='+', default=["../data/train.npz"],
                         help='Paths to training data files')
@@ -296,14 +237,12 @@ if __name__ == "__main__":
     parser.add_argument('--pretrain_path', type=str, default=None, help='Path to load a pre-trained Unet model ')
 
 
-    # Parse the arguments
     args = parser.parse_args()
     train_file_paths = []
     train_file_paths.extend(args.train_paths)
     train_file_paths.extend(args.generator_train_paths)
 
 
-    # Set the random seed
     set_seed(args.seed)
 
     train_data, train_label, _ = load_and_combine_npz(
@@ -314,16 +253,13 @@ if __name__ == "__main__":
     )
     train_dataset = TensorDataset(torch.cat([train_data], dim=0), torch.cat([train_label], dim=0))
 
-    # Define paths for validation and test data files
     npz_result_val = args.npz_result_val
     npz_result_test = args.npz_result_test
 
 
-    # Load validation data
     val_data, val_label, val_csv_names = load_and_combine_npz(file_paths=[npz_result_val], include_csv_names=True)
     val_dataset = PatientDataset(val_data, val_label, val_csv_names)
 
-    # Load test data
     test_data, test_label, test_csv_names = load_and_combine_npz(file_paths=[npz_result_test], include_csv_names=True)
     test_dataset = PatientDataset(test_data, test_label, test_csv_names)
 

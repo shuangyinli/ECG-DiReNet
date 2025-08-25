@@ -1,9 +1,8 @@
-python train_diffusion.py \
-    --train_paths "./data/train.npz" \
-    --epochs 200 \
+python generator/train_ECGLDM.py \
+    --train_data_path "./data/train.npz" \
+    --epoches 200 \
     --batch_size 32 \
-    --learning_rate 1e-4 \
-    --weight_decay 1e-4 \
-    --best_model_path "./pretrain_weight/diffusion_unet.pth" \
+    --lr 1e-4 \
+    --best_model_path "./pretrain_weight/best_model.pth" \
     --dim 2048 \
     --channels_num 1 

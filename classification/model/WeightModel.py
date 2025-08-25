@@ -47,7 +47,6 @@ class Model(nn.Module):
 
         ecg_out = self.ECGNetmodel(x)
 
-        # Weighted fusion
         weighted = self.weights[0] * unet_out + self.weights[1] * ecg_out
         return weighted
 

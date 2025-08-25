@@ -1,3 +1,7 @@
+好的，没问题。我已经为您添加了预训练权重和论文引用的部分，并进行了一些格式上的微调，使其更清晰。
+
+-----
+
 ## Why Use a Diffusion Model for ECG Generation and Atrial Substrate Classification? 🤔
 
 The assessment of atrial substrate status is critical for cardiac patients, but current methods are often expensive, invasive, and complex. While personalized electrocardiographic (ECG) data offers a non-invasive alternative, the scarcity of ECG data annotated with atrial substrate status has significantly hindered the development of accurate deep learning models.
@@ -7,8 +11,7 @@ To address this challenge, our work introduces the **ECG Large Diffusion Model (
   * **Tackling Data Scarcity.** By generating a massive number of high-quality, diverse, and realistic ECG samples, the diffusion model overcomes the primary bottleneck of limited real-world data.
   * **Capturing Patient-Specific Signatures.** The generated data is not random; it is conditioned to reflect specific atrial substrate states, providing a robust dataset for training a highly accurate diagnostic model. This allows our subsequent classifier, ECGNet, to learn the subtle mapping between ECG signals and the underlying atrial substrate state, achieving breakthrough diagnostic accuracy.
 
-
-![Model Overview](assets/overview.png)
+-----
 
 ## Overview 📚
 
@@ -20,20 +23,37 @@ This study proposes a novel three-stage framework to enable the automated, non-i
 
 This entire framework provides a powerful AI solution for the non-invasive assessment of atrial substrate status, holding significant value for both theoretical research and clinical application.
 
+-----
+
 ## Features ✨
 
   * **Unified Data Preprocessing:** All ECG signals undergo a standardized and rigorous preprocessing pipeline, including wavelet transform for denoising, normalization. This ensures data quality and stability for both generation and classification tasks.
   * **Separated Generator and Classifier:** The architecture cleanly separates the data generation module (ECG LDM) from the diagnostic module (ECGNet). This modular design allows the generator to focus solely on creating high-fidelity data, which then provides a robust foundation for training a state-of-the-art classifier.
   * **Comprehensive Baseline Comparisons:** The performance of our framework is extensively validated against other models. The ECG LDM is compared with four other mainstream generative models (e.g., D2GAN, WGAN), and the ECGNet classifier is benchmarked against traditional machine learning and deep learning models like Random Forest, CNN, and CNN-LSTM.
 
+-----
+
 ## Datasets 📊
 
 The dataset used in this study is a high-quality clinical ECG database collected from two major medical centers: Jiangsu Provincial People's Hospital (1,051 cases) and Sun Yat-sen Memorial Hospital of Sun Yat-sen University (171 cases), for a total of 1,222 samples. This dataset is clinically representative, encompassing a wide spectrum of atrial substrate states and providing a reliable foundation for model training and validation.
 
+-----
+
 ## Our Experiments 🔬
 
-Please check the experimental results and analysis from our paper.
+Please check the experimental results and analysis from our [paper](https://www.google.com/search?q=%23).
 
+-----
+
+## Pre-trained Weights 🏋️
+
+You can download the pre-trained weights for both the ECG LDM generator from the following link.
+
+  * **ECG LDM:** [Download Here](https://www.google.com/search?q=%23)
+
+Place the downloaded weights into the `./pretrain_weight/` directory to use them for data generation.
+
+-----
 
 ## Package Usage ⚙️
 
@@ -45,14 +65,58 @@ You can quickly install the corresponding dependencies.
 pip install -r requirements.txt
 ```
 
-
 ### Running Experiments 🚀
 
- 
-## Star and Cite ⭐
+Follow these steps to train the models and generate data. The commands are based on the provided shell scripts.
 
-Please star our repo 🌟 and cite our paper if you find this work useful.
+#### Step 1: Train the ECG LDM Generator
 
+First, train the ECG Large Diffusion Model (ECG LDM) to learn the patterns of the real ECG data. This model will be used to generate synthetic data in the next step.
+
+```bash
+# Train the diffusion model on your dataset
+sh train_generator.sh
 ```
+
+This command executes the `generator/train_ECGLDM.py` script. The trained model weights will be saved to the path specified in the script (by default, `./pretrain_weight/best_model.pth`).
+
+#### Step 2: Generate Synthetic ECG Data
+
+Once the generator is trained, you can use it to create a large volume of synthetic ECG data. The following scripts will generate samples for both positive and negative atrial substrate states.
+
+```bash
+sh generate_good_label.sh
+
+sh generate_bad_label.sh
+```
+
+These scripts use the trained generator weights from Step 1 to produce new `.npz` files containing the synthetic data, which will be saved in the `./generated/` directory.
+
+#### Step 3: Train the Classifier
+
+Finally, train the diagnostic classifier using a combination of the original real data and the newly generated synthetic data.
+
+You have two options for training:
+
+**Option A: Train the Classifier from Scratch**
+
+This command trains the complete classification model without any pre-trained weights.
+
+```bash
+# Train the final classifier on the combined real and synthetic dataset
+sh classification.sh
+```
+
+**Option B: Train with a Pre-trained UNet Backbone**
+
+This approach leverages pre-trained weights for the UNet portion of the model, which can speed up convergence and potentially improve performance.
+
+```bash
+# Train the classifier using the pre-trained diffusion UNet weights
+sh classification_pretrain.sh
+```
+
+Both scripts will train the classifier, evaluate it on the validation and test sets, and save the best-performing model weights to the path specified in the script
+
+-----
  
-```
