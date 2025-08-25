@@ -67,18 +67,13 @@ Follow these steps to train the models and generate data. The commands are based
 
 #### Step 1: Train the ECG LDM Generator
 
-First, train the ECG Large Diffusion Model (ECG LDM) to learn the patterns of the real ECG data. This model will be used to generate synthetic data in the next step.
-
 ```bash
 # Train the diffusion model on your dataset
 sh train_generator.sh
 ```
 
-This command executes the `generator/train_ECGLDM.py` script. The trained model weights will be saved to the path specified in the script (by default, `./pretrain_weight/best_model.pth`).
 
 #### Step 2: Generate Synthetic ECG Data
-
-Once the generator is trained, you can use it to create a large volume of synthetic ECG data. The following scripts will generate samples for both positive and negative atrial substrate states.
 
 ```bash
 sh generate_good_label.sh
@@ -86,31 +81,21 @@ sh generate_good_label.sh
 sh generate_bad_label.sh
 ```
 
-These scripts use the trained generator weights from Step 1 to produce new `.npz` files containing the synthetic data, which will be saved in the `./generated/` directory.
-
 #### Step 3: Train the Classifier
 
-Finally, train the diagnostic classifier using a combination of the original real data and the newly generated synthetic data.
-
-You have two options for training:
-
-**Option A: Train the Classifier from Scratch**
-
-This command trains the complete classification model without any pre-trained weights.
+**Option A: Train the Classifier without Pre-trained UNet**
 
 ```bash
 # Train the final classifier on the combined real and synthetic dataset
 sh classification.sh
 ```
 
-**Option B: Train with a Pre-trained UNet Backbone**
+**Option B: Train with Pre-trained UNet**
 
-This approach leverages pre-trained weights for the UNet portion of the model, which can speed up convergence and potentially improve performance.
 
 ```bash
 # Train the classifier using the pre-trained diffusion UNet weights
 sh classification_pretrain.sh
 ```
 
-Both scripts will train the classifier, evaluate it on the validation and test sets, and save the best-performing model weights to the path specified in the script
 
