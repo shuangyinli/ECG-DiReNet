@@ -31,19 +31,13 @@ class EMA():
 
 # 进行小波变换
 def wavelet_transform(ecg_data):
-    # 用db5作为小波基，对心电数据进行9尺度小波变换
     coeffs = pywt.wavedec(data=ecg_data, wavelet='sym8', level=8)
-    #cA9 , cD9, cD8, cD7, cD6, cD5, cD4, cD3, cD2, cD1 = coeffs
     cA8, cD8, cD7, cD6, cD5, cD4, cD3, cD2, cD1 = coeffs
-    #cA6,cD6, cD5, cD4, cD3, cD2, cD1 = coeffs
     threshold = (np.median(np.abs(cD1)) / 0.6745) * (np.sqrt(2 * np.log(len(cD1))))
 
-    # 将高频信号cD1、cD2置零
     cD1.fill(0)
     cD2.fill(0)
-    #cA9.fill(0)
     coeffs = [cA8, cD8, cD7, cD6, cD5, cD4, cD3, cD2, cD1]
-    # 将其他中低频信号按软阈值公式滤波
     for i in range(0, len(coeffs) - 2):
         coeffs[i] = pywt.threshold(coeffs[i], threshold)
     rdata = pywt.waverec(coeffs=coeffs, wavelet='sym8')
@@ -56,13 +50,24 @@ def moving_average(interval, windowsize):
 
 
 def Normalization2(x):
-    x = torch.tensor(x, dtype=torch.float32)  
-    mean_val = torch.mean(x)
-    max_val = torch.max(x)
-    min_val = torch.min(x)
+    # 使用numpy方法进行归一化
+    mean_val = np.mean(x)
+    max_val = np.max(x)
+    min_val = np.min(x)
     return [(float(i) - mean_val) / (max_val - min_val) for i in x]
 
 
+def smooth_continuous_outliers(data, num_outliers=20, window_size=41):
+    smoothed_data = np.copy(data)
+    half_window = window_size // 2
+
+    # 处理前num_outliers个异常点
+    for i in range(num_outliers):
+        start = max(i - half_window, 0)
+        end = min(i + half_window + 1, len(data))
+        average_value = np.mean(data[start:end])
+        smoothed_data[i] = average_value
+    return smoothed_data
 
 
 def save_checkpoint(path, epoch,net,  optimizer, dev_best_loss,iter_step,verbose=True):
