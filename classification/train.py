@@ -115,8 +115,7 @@ def discriminative_score_metrics(train_dataset, val_dataset, test_dataset, devic
     # Calculate class weights
     pos_weight = compute_pos_weight(train_dataset)
     pos_weight = pos_weight.to(device)
-    print(f"Calculated pos_weight: {pos_weight.item():.4f}")
-
+ 
     # Loss function
     criterion = FocalLoss(alpha=1.2, gamma=2.0, reduction='mean')
 
@@ -280,48 +279,45 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Train a discriminative model.')
 
     # Add arguments
-    parser.add_argument('--seed', type=int, default=42, help='Random seed for reproducibility')
-    parser.add_argument('--generator_train_paths', nargs='+', default=["../clean_data.npz", "../clean_data3.npz", "../clean_data4.npz"],
+    parser.add_argument('--seed', type=int, default=99, help='Random seed for reproducibility')
+    parser.add_argument('--train_paths', nargs='+', default=["../data/train.npz"],
+                        help='Paths to training data files')
+    parser.add_argument('--generator_train_paths', nargs='+', default=["../data/clean_data.npz","../data/clean_data3.npz","../data/clean_data4.npz"],
                         help='Paths to original training data files')
-    parser.add_argument('--npz_result_val', type=str, default="/home/ljj/study/DL/GAN/val.npz", help='Path to validation data file')
-    parser.add_argument('--npz_result_test', type=str, default="/home/ljj/study/DL/GAN/test.npz", help='Path to test data file')
-    parser.add_argument('--epochs', type=int, default=2, help='Number of training epochs')
+    parser.add_argument('--npz_result_val', type=str, default="../data/val.npz", help='Path to validation data file')
+    parser.add_argument('--npz_result_test', type=str, default="../data/test.npz", help='Path to test data file')
+    parser.add_argument('--epochs', type=int, default=100, help='Number of training epochs')
     parser.add_argument('--batch_size', type=int, default=64, help='Batch size for training')
     parser.add_argument('--learning_rate', type=float, default=5e-4, help='Learning rate for the optimizer')
     parser.add_argument('--weight_decay', type=float, default=1e-4, help='Weight decay for the optimizer')
     parser.add_argument('--checkpoint_path', type=str, default=None, help='Path to load a pre-trained model checkpoint')
-    parser.add_argument('--best_model_path', type=str, default='./weight/weight_model_wo_unetpt1.pth',
+    parser.add_argument('--best_model_path', type=str, default='./weight/classification_model.pth',
                         help='Path to save the best model')
     parser.add_argument('--pretrain_path', type=str, default=None, help='Path to load a pre-trained Unet model ')
 
 
     # Parse the arguments
     args = parser.parse_args()
-    generator_train_path1 = "/home/ljj/study/DL/GAN/val.npz"
-    generator_train_path2 = "/home/ljj/study/DL/GAN/val.npz"
-    generator_train_path3 = "/home/ljj/study/DL/GAN/val.npz"
-    original_train_path = "/home/ljj/study/DL/GAN/test.npz"
+    train_file_paths = []
+    train_file_paths.extend(args.train_paths)
+    train_file_paths.extend(args.generator_train_paths)
 
-    train_file_paths = [generator_train_path1,generator_train_path2,generator_train_path3,original_train_path]
 
     # Set the random seed
     set_seed(args.seed)
 
-    # Define paths for original training data files
-    original_train_paths = train_file_paths
+    train_data, train_label, _ = load_and_combine_npz(
+        file_paths=train_file_paths,
+        file_specific_limit={},
+        shuffle=True, 
+        include_csv_names=False
+    )
+    train_dataset = TensorDataset(torch.cat([train_data], dim=0), torch.cat([train_label], dim=0))
 
     # Define paths for validation and test data files
     npz_result_val = args.npz_result_val
     npz_result_test = args.npz_result_test
-    print(npz_result_val,npz_result_test)
-    # Specific limits for each file (if any)
-    file_specific_limit_genator = {}
 
-    # Load and combine training data
-    genator_data, genator_label, _ = load_and_combine_npz(file_paths=original_train_paths,
-                                                          file_specific_limit=file_specific_limit_genator,
-                                                          shuffle=True, include_csv_names=False)
-    train_dataset = TensorDataset(torch.cat([genator_data], dim=0), torch.cat([genator_label], dim=0))
 
     # Load validation data
     val_data, val_label, val_csv_names = load_and_combine_npz(file_paths=[npz_result_val], include_csv_names=True)
@@ -331,10 +327,8 @@ if __name__ == "__main__":
     test_data, test_label, test_csv_names = load_and_combine_npz(file_paths=[npz_result_test], include_csv_names=True)
     test_dataset = PatientDataset(test_data, test_label, test_csv_names)
 
-    # Determine the device to use (GPU if available, otherwise CPU)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # Call the training function with the specified arguments
     discriminative_score_metrics(
         train_dataset=train_dataset,
         val_dataset=val_dataset,
