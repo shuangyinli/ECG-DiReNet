@@ -1,7 +1,3 @@
-好的，没问题。我已经为您添加了预训练权重和论文引用的部分，并进行了一些格式上的微调，使其更清晰。
-
------
-
 ## Why Use a Diffusion Model for ECG Generation and Atrial Substrate Classification? 🤔
 
 The assessment of atrial substrate status is critical for cardiac patients, but current methods are often expensive, invasive, and complex. While personalized electrocardiographic (ECG) data offers a non-invasive alternative, the scarcity of ECG data annotated with atrial substrate status has significantly hindered the development of accurate deep learning models.
@@ -118,5 +114,3 @@ sh classification_pretrain.sh
 
 Both scripts will train the classifier, evaluate it on the validation and test sets, and save the best-performing model weights to the path specified in the script
 
------
- 
