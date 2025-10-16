@@ -1,5 +1,4 @@
 # ECG-DiReNet
-a unified framework of ECG Diagnosis via Diffusion-Reinforced Network
 
 ## Why Use ECG-DiReNet for ECG Generation and Atrial Substrate Classification? 
 
