@@ -33,18 +33,6 @@ The shape of the generated ECG data is `[N, Len, feature]`, where:
 *   `Len` is the time-series length of each ECG sample.
 *   `feature` is the feature dimension of the ECG signal.
 
-**Sample:**
-<p align="center">
-      <strong>Normal Atrial Substrate</strong><br>
-
-  <img src="./assets/picture_good.jpg" alt="Sample ECGs for Normal Atrial Substrate" width="70%">
-</p>
-
-<p align="center">
-      <strong>Abnormal Atrial Substrate</strong><br>
-  <img src="./assets/picture_bad.jpg"  alt="Sample ECGs for  Abnormal Atrial Substrate" width="70%">
-</p>
-
 
 
 **Data Availability Statement:**
