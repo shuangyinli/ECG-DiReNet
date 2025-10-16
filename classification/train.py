@@ -223,7 +223,7 @@ if __name__ == "__main__":
     parser.add_argument('--seed', type=int, default=99, help='Random seed for reproducibility')
     parser.add_argument('--train_paths', nargs='+', default=["../data/train.npz"],
                         help='Paths to training data files')
-    parser.add_argument('--generator_train_paths', nargs='+', default=["../data/clean_data.npz","../data/clean_data3.npz","../data/clean_data4.npz"],
+    parser.add_argument('--generator_train_paths', nargs='+', default=["../data/generate_data.npz"],
                         help='Paths to original training data files')
     parser.add_argument('--npz_result_val', type=str, default="../data/val.npz", help='Path to validation data file')
     parser.add_argument('--npz_result_test', type=str, default="../data/test.npz", help='Path to test data file')
