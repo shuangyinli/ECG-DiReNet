@@ -35,11 +35,11 @@ The dataset used in this study is a high-quality clinical ECG database collected
 
 This dataset contains valuable clinical information, covering a wide spectrum of atrial substrate states.
 
-- **Data Status**: To protect patient privacy and comply with strict data usage agreements, the original clinical data is not publicly available. However, access can be granted for research purposes upon reasonable request. Please contact the corresponding authors for further details.
+- **Data Status**: To protect patient privacy and comply with strict data usage agreements, the real clinical data is not publicly available. However, access can be granted for research purposes upon reasonable request. Please contact the corresponding authors for further details.
 
 
 
-### Generated ECG Dataset 
+### Synthetic   ECG Dataset 
 
 To overcome the limitation of not being able to share the real data and to advance research in this field, we have generated and are publicly releasing a large-scale synthetic ECG dataset using our ECG LDM model.
 
