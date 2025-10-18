@@ -12,6 +12,7 @@ To address this challenge, our work introduces the **ECG-DiReNet** (ECG Diagnosi
 -----
 
 ## Overview 
+
 [![Overview](./assets/overview.png)](Overview)
 
 This study proposes ECG-DiReNet, a novel three-stage framework to enable the automated, non-invasive diagnosis of atrial substrate status using ECG data. Our paradigm is designed to simulate and enhance the clinical diagnostic workflow:
@@ -23,22 +24,101 @@ This study proposes ECG-DiReNet, a novel three-stage framework to enable the aut
 -----
 
 
+
 ## Datasets 
 
-The dataset used in this study is a high-quality clinical ECG database collected from two major medical centers: Jiangsu Provincial People's Hospital (1,051 cases) and Sun Yat-sen Memorial Hospital of Sun Yat-sen University (171 cases), for a total of 1,222 patient samples. To fully leverage this valuable clinical data, **we segmented the original long-term ECG recordings into shorter samples, ultimately creating a training set of approximately 20,000 samples.** This dataset is clinically representative, encompassing a wide spectrum of atrial substrate states and providing a reliable foundation for model training and validation.
+The dataset used in this study is a high-quality clinical ECG database collected from two major medical centers: Jiangsu Provincial People's Hospital (1,051 cases) and Sun Yat-sen Memorial Hospital of Sun Yat-sen University (171 cases), totaling 1,222 patient samples. To fully leverage this valuable clinical data, we segmented the original long-term ECG recordings into shorter samples, creating a training set of approximately 20,000 real samples. This dataset is clinically representative, encompassing a wide spectrum of atrial substrate states, and provides a reliable foundation for model training and validation.
 
-**Data Format:**
-The shape of the generated ECG data is `[N, Len, feature]`, where:
-*   `N` is the number of generated samples.
-*   `Len` is the time-series length of each ECG sample.
-*   `feature` is the feature dimension of the ECG signal.
 
+
+### Real Clinical Dataset 
+
+This dataset contains valuable clinical information, covering a wide spectrum of atrial substrate states.
+
+- **Data Status**: To protect patient privacy and comply with strict data usage agreements, the original clinical data is not publicly available. However, access can be granted for research purposes upon reasonable request. Please contact the corresponding authors for further details.
+
+
+
+### Generated ECG Dataset 
+
+To overcome the limitation of not being able to share the real data and to advance research in this field, we have generated and are publicly releasing a large-scale synthetic ECG dataset using our ECG LDM model.
+
+- **Total Samples**: 216,913
+- **Labels**: Each sample is annotated with its atrial substrate status (0 for normal, 1 for abnormal).
+
+
+#### Data Formats & Usage  
+
+The synthetic dataset is provided in three formats to accommodate different research needs:  
+
+
+##### (1) `.npz` 
+
+This is the raw structured format, preserving the time-series and feature dimensions, suitable for direct model training or further signal processing.  
+
+- **Format Details**:  
+  The `.npz` file contains two key arrays:  
+
+  - `data`: Shape `[N, Len, feature]` where `N` (total samples), `Len` (time-series length), and `feature` (signal dimensions) are consistent with clinical ECG standards.  
+  - `label`: Shape `[N]` where each element is `0` (normal atrial substrate) or `1` (abnormal atrial substrate).  
+
+- **Python Usage Example**:  
+
+  ```python
+  import numpy as np
+  
+  # Load the .npz file
+  with np.load("generate_data.npz") as data:
+      ecg_signals = data["data"]  
+      labels = data["label"]      
+  # Example: Print basic info
+  print(f"ecg_signals samples: {ecg_signals.shape}")
+  print(f"label:  {labels.shape}")  
+  ```
+
+
+##### (2) `.csv` 
+
+This format flattens the time-series and feature dimensions into a single row per sample, with labels appended as the last column, suitable for statistical analysis or tools requiring tabular input.  
+
+- **Format Details**:  
+  Shape `[N, Len×feature + 1]` where:  
+
+  - The first `Len×feature` columns correspond to the flattened ECG signal.  
+  - The last column is the label (`0` or `1`).  
+
+- **Python Usage Example**:  
+
+  ```python
+  import pandas as pd
+  import numpy as np
+  
+  # Load the .csv file
+  df = pd.read_csv("generated_ecg_data.csv", header=None)  
+  data_flat = df.iloc[:, :-1].values 
+  labels = df.iloc[:, -1].values      
+  
+  Len = 2048  
+  feature = 1  
+  ecg_signals = data_flat.reshape(-1, Len, feature) 
+  
+  print(f"Reshaped signal shape: {ecg_signals.shape}")
+  ```
+
+
+##### (3) `.png` 
+
+We provide **100 PNG images** (50 for normal and 50 for abnormal) for intuitive visualization of the generated ECG waveform characteristics.
+
+[![Sample](./assets/sample.png)](sample)
+*Example of generated ECG signals (normal vs. abnormal atrial substrate)*
 
 
 **Data Availability Statement:**
-To protect patient privacy and comply with data usage agreements, the real clinical ECG data will not be made public. However, we are publicly releasing the complete synthetic dataset generated by our ECG LDM to support further research.
+To protect patient privacy and comply with data usage agreements, the real clinical ECG data will not be made public. However, the complete synthetic dataset (in `.npz`, `.csv`, and `.png` formats) generated by our ECG LDM is publicly available for research purposes.  
 
 - **Generated ECG Dataset**: [Download Here](https://www.google.com/search?q=%23)
+
 
 -----
 
@@ -56,7 +136,7 @@ pip install -r requirements.txt
 ### Running Experiments 
 
 The following instructions are based on using your own custom training data. Since our clinical dataset cannot be made public due to privacy regulations, you need to prepare the dataset first and put it in the `./data` directory.
- 
+
 #### Step 1: Train the ECG LDM
 
 ```bash
@@ -89,4 +169,3 @@ sh classification.sh
 # Train the classifier using the pre-trained diffusion UNet weights
 sh classification_pretrain.sh
 ```
-
