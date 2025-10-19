@@ -184,5 +184,7 @@ sh classification_pretrain.sh
 
 -----
 
+**Models**
 
+We release out the trained model, ECG-PredNet, and a 
 
