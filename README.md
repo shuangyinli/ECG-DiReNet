@@ -17,7 +17,7 @@ To address this challenge, our work introduces the **ECG-DiReNet** (ECG Diagnosi
 
 This study proposes ECG-DiReNet, a novel three-stage framework to enable the automated, non-invasive diagnosis of atrial substrate status using ECG data. Our paradigm is designed to simulate and enhance the clinical diagnostic workflow:
 
-1.  **Data Generation:** We employ the **ECG LDM** to generate massive amounts of synthetic ECG training data from a small initial sample set.
+1.  **Data Generation:** We employ the **ECG-LDM** to generate massive amounts of synthetic ECG training data from a small initial sample set.
 2.  **Reinforcement Learning:** We introduce a "Human-in-the-loop" reinforcement learning mechanism where expert knowledge from cardiologists is used to continuously refine the generative model, ensuring the synthetic data meets high standards of medical accuracy and clinical compliance.
 3.  **Model Prediction**: Finally, we train a highly accurate diagnostic model, **ECG-PredNet**, on this enhanced and expanded dataset to precisely classify atrial substrate status.
 
@@ -39,9 +39,9 @@ This dataset contains valuable clinical information, covering a wide spectrum of
 
 
 
-### Synthetic   ECG Dataset 
+### Synthetic ECG Dataset 
 
-To overcome the limitation of not being able to share the real data and to advance research in this field, we have generated and are publicly releasing a large-scale synthetic ECG dataset using our ECG LDM model.
+To overcome the limitation of not being able to share the real data and to advance research in this field, we have generated and are publicly releasing a large-scale synthetic ECG dataset using our ECG LDM model. Everyone CAN generate more samples following the ECG-LDM proposed in our work.
 
 - **Total Samples**: 216,913
 - **Labels**: Each sample is annotated with its atrial substrate status (0 for normal, 1 for abnormal).
