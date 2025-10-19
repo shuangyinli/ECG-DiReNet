@@ -186,5 +186,16 @@ sh classification_pretrain.sh
 
 **Models**
 
-We release out the trained model, ECG-PredNet, and a 
+We release out the trained model, ECG-PredNet, and a small test data that one can run the following python code to see the predict results.
+```bash
+python code 。。。
+```
+
+Trained ECG-PredNet [Download](http://www.shuangyinli.cn/data/ECG-PredNet)
+
+Test Data  [Download](http://www.shuangyinli.cn/data/ecg_testdata.zip)
+
+
+
+
 
