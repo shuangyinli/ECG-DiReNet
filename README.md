@@ -56,7 +56,7 @@ The synthetic dataset is provided [here](http://shuangyinli.cn/data/ecg.html) in
 
 This is the raw structured format, preserving the time-series and feature dimensions, suitable for direct model training or further signal processing.  
 
-[Download](http://www.shuangyinli.cn/data/ecg_samples_png.zip) 
+[Download](http://www.shuangyinli.cn/data/ecg_data_generated.npz) 
 
 - **Format Details**:  
   The `.npz` file contains two key arrays:  
