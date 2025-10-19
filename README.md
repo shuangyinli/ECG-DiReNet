@@ -41,7 +41,7 @@ This dataset contains valuable clinical information, covering a wide spectrum of
 
 ### Synthetic ECG Dataset 
 
-To overcome the limitation of not being able to share the real data and to advance research in this field, we have generated and are publicly releasing a large-scale synthetic ECG dataset using our ECG LDM model. Everyone CAN generate more samples following the ECG-LDM proposed in our work.
+To overcome the limitation of not being able to share the real data and to advance research in this field, we have generated and are publicly releasing a large-scale synthetic ECG dataset using our ECG LDM model. Everyone CAN generate **MORE** samples following the ECG-LDM proposed in our work.
 
 - **Total Samples**: 216,913
 - **Labels**: Each sample is annotated with its atrial substrate status (0 for normal, 1 for abnormal).
