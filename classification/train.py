@@ -68,21 +68,10 @@ def discriminative_score_metrics(train_dataset, val_dataset, test_dataset, devic
         collate_fn=collate_fn_val  
     )
 
-    number_of_diffusions = 1000
-    kernel_size = 5
-    num_levels = 3
-    n_channels = 1
-    resolution = 2048
+ 
 
-    model = Model(
-        number_of_diffusions=number_of_diffusions,
-        kernel_size=kernel_size,
-        num_levels=num_levels,
-        n_channels=n_channels,
-        resolution=resolution,
-        device=device,
-        load_path=pretrain_path
-    ).to(device)
+    model = Model(device, load_path=args.pretrain_path).to(device)
+
 
     optimizer = optim.AdamW(
         model.parameters(),   

@@ -198,22 +198,34 @@ sh classification_pretrain.sh
 
 -----
 
+
 **Models**
 
 We release out the trained model, ECG-PredNet, and a small test data that one can run the following python code to see the predict results.
-```bash
-python code 。。。
-```
 
-Trained ECG-PredNet [Download](http://www.shuangyinli.cn/data/ECG-PredNet)
 
-Test Data  [Download](http://www.shuangyinli.cn/data/ecg_testdata.zip)
+1.  **Download the Model and Data demo:**
+
+      * Trained ECG-PredNet: [Download](http://www.shuangyinli.cn/data/ECG-PredNet)
+      * Test Data: [Download](http://www.shuangyinli.cn/data/ecg_testdata.zip)
+
+2.  **Organize Files:**
+    After downloading, please place the files in the following directory structure so the script can find them:
+
+      * Place the model file inside weight folder: `./weight/ECG-PredNet.pth`
+      * Place the `.npz` file inside data folder: `./data/test_sample_dataset.npz`
+
+3.  **Run the Demo:**
+    ```bash
+    sh classification_demo_predict_ecg.sh
+    ```
 
 -----
 ## Experimental Results
-The figure below shows the core experimental  of our study. It presents a comparative performance analysis of our model against several baseline models. 
+The figures below summarize our core experimental. The first figure shows that augmenting the training set with our synthetic data consistently improves the performance of the ECG-PredNet model. The second figure then compares our model against several baselines.
+[![result_boxplot](./assets/boxplot.png)](result)
 
-[![result](./assets/scatter.png)](result)
+[![result_scatter](./assets/scatter.png)](result)
 
 -----
 

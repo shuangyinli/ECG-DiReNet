@@ -1,11 +1,10 @@
 python classification/train.py \
-    --seed 99 \
     --train_paths "./data/train.npz" \
     --generator_train_paths "./data/generate_data.npz"\
     --npz_result_val "./data/val.npz" \
     --npz_result_test "./data/test.npz" \
     --epochs 100 \
     --batch_size 64 \
-    --learning_rate 5e-4 \
+    --learning_rate 2e-4 \
     --weight_decay 1e-4 \
-    --best_model_path "./weight/ECG_PredNet_original.pth" \
+    --best_model_path "./weight/classification_model_original.pth" \
