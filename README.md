@@ -108,7 +108,9 @@ This format flattens the time-series and feature dimensions into a single row pe
 
 ##### (3) `.png` 
 
-We also provide **100 PNG images** (50 for normal and 50 for abnormal) for intuitive visualization of the generated ECG waveform characteristics. The 100 png images is selected from the above generated samples. If someone needs more .png-format images, plz take the following scripts to convert.
+We also provide **100 PNG images** [Download](http://www.shuangyinli.cn/data/ecg_samples_png.zip) (50 for normal and 50 for abnormal) for intuitive visualization of the generated ECG waveform characteristics. The 100 png images is selected from the above generated samples. If someone needs more .png-format images, plz take the following scripts to convert.
+
+
 
 - **Python Usage Example**:
   ....
