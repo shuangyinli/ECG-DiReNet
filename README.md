@@ -49,8 +49,7 @@ To overcome the limitation of not being able to share the real data and to advan
 
 #### Data Formats & Usage  
 
-The synthetic dataset is provided in three formats to accommodate different research needs.
-
+The synthetic dataset is provided [here](http://shuangyinli.cn/data/ecg.html) in three formats to accommodate different research needs.
 
 
 ##### (1) `.npz` 
