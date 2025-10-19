@@ -1,13 +1,13 @@
 # ECG-DiReNet
 
-## Why Use ECG-DiReNet for ECG Generation and Atrial Substrate Classification? 
+## Why Use ECG-DiReNet for ECG Generation and Atrial Substrate Prediction? 
 
 The assessment of atrial substrate status is critical for cardiac patients, but current methods are often expensive, invasive, and complex. While personalized electrocardiographic (ECG) data offers a non-invasive alternative, the scarcity of ECG data annotated with atrial substrate status has significantly hindered the development of accurate deep learning models.
 
 To address this challenge, our work introduces the **ECG-DiReNet** (ECG Diagnosis via Diffusion-Reinforced Network). This approach is highly effective because:
 
   * **Tackling Data Scarcity.** By generating a massive number of high-quality, diverse, and realistic ECG samples, the diffusion model overcomes the primary bottleneck of limited real-world data.
-  * **Capturing Patient-Specific Signatures.** The generated data is not random; it is conditioned to reflect specific atrial substrate states, providing a robust dataset for training a highly accurate diagnostic model. This allows our subsequent classifier, ECG-PredNet, to learn the subtle mapping between ECG signals and the underlying atrial substrate state, achieving breakthrough diagnostic accuracy.
+  * **Capturing Patient-Specific Latent Features.** It is conditioned to reflect specific atrial substrate states, providing a robust dataset for training a highly accurate diagnostic model. This allows our subsequent predictor, ECG-PredNet, to learn the subtle mapping between ECG signals and the underlying atrial substrate state, achieving breakthrough diagnostic accuracy.
 
 -----
 
@@ -19,7 +19,7 @@ This study proposes ECG-DiReNet, a novel three-stage framework to enable the aut
 
 1.  **Data Generation:** We employ the **ECG-LDM** to generate massive amounts of synthetic ECG training data from a small initial sample set.
 2.  **Reinforcement Learning:** We introduce a "Human-in-the-loop" reinforcement learning mechanism where expert knowledge from cardiologists is used to continuously refine the generative model, ensuring the synthetic data meets high standards of medical accuracy and clinical compliance.
-3.  **Model Prediction**: Finally, we train a highly accurate diagnostic model, **ECG-PredNet**, on this enhanced and expanded dataset to precisely classify atrial substrate status.
+3.  **Model Prediction**: We design a highly accurate diagnostic model, **ECG-PredNet**, on this enhanced and expanded dataset to precisely predict atrial substrate status.
 
 -----
 
