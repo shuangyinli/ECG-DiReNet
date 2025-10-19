@@ -1,8 +1,8 @@
 # ECG-DiReNet
 
-## Why Use ECG-DiReNet for ECG Generation and Atrial Substrate Prediction? 
+## Why Use ECG-DiReNet for The diagnosis of atrial substrate status? 
 
-The assessment of atrial substrate status is critical for cardiac patients, but current methods are often expensive, invasive, and complex. While personalized electrocardiographic (ECG) data offers a non-invasive alternative, the scarcity of ECG data annotated with atrial substrate status has significantly hindered the development of accurate deep learning models.
+The diagnosis of atrial substrate status is critical for cardiac patients, but current methods are often expensive, invasive, and complex. While personalized electrocardiographic (ECG) data offers a non-invasive alternative, the scarcity of ECG data annotated with atrial substrate status has significantly hindered the development of accurate deep learning models.
 
 To address this challenge, our work introduces the **ECG-DiReNet** (ECG Diagnosis via Diffusion-Reinforced Network). This approach is highly effective because:
 
