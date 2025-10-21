@@ -222,8 +222,7 @@ We release out the trained model, ECG-PredNet, and a small test data that one ca
 
 -----
 ## Experimental Results
-The figures below summarize our core experimental. The first figure shows that augmenting the training set with our synthetic data consistently improves the performance of the ECG-PredNet model. The second figure then compares our model against several baselines.
-[![result_boxplot](./assets/boxplot.png)](result)
+The figure below summarizes our core experimental results and compares our model against several baselines.
 
 [![result_scatter](./assets/scatter.png)](result)
 
