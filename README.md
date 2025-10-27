@@ -206,8 +206,8 @@ We release out the trained model, ECG-PredNet, and a small test data that one ca
 
 1.  **Download the Model and Data demo:**
 
-      * Trained ECG-PredNet: [Download](http://www.shuangyinli.cn/data/ECG-PredNet)
-      * Test Data: [Download](http://www.shuangyinli.cn/data/ecg_testdata.zip)
+      * Trained ECG-PredNet: [Download](http://www.shuangyinli.cn/data/ECG-PredNet_model.zip)
+      * Test Data: [Download](http://www.shuangyinli.cn/data/test_sample_dataset.zip)
 
 2.  **Organize Files:**
     After downloading, please place the files in the following directory structure so the script can find them:
