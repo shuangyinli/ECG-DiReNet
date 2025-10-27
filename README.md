@@ -15,7 +15,7 @@ To address this challenge, our work introduces the **ECG-DiReNet** (ECG Diagnosi
 
 <p align="center">
   <a href="Overview">
-    <img src="./assets/overview.png" alt="Overview" width="80%"/>
+    <img src="./assets/overview.png" alt="Overview" width="85%"/>
   </a>
 </p>
 
@@ -138,7 +138,7 @@ We also provide **100 PNG images** (50 for normal and 50 for abnormal) for intui
   plt.show()
 ```
 <p align="center">
-  <a href="sample"><img src="./assets/sample.png" alt="Sample" width="70%"></a>
+  <a href="sample"><img src="./assets/sample.png" alt="Sample" width="65%"></a>
   <br>
   <i>Example of generated ECG signals (normal vs. abnormal atrial substrate)</i>
 </p>
@@ -230,7 +230,9 @@ We release out the trained model, ECG-PredNet, and a small test data that one ca
 ## Experimental Results
 The figure below summarizes our core experimental results and compares our model against several baselines.
 
-<center><a href="result"><img src="./assets/scatter.png" alt="result_scatter" width="85%"></a></center>
+<p align="center">
+  <a href="result"><img src="./assets/scatter.png" alt="result_scatter" width="70%"></a>
+</p>
 
 -----
 
