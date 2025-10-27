@@ -13,7 +13,11 @@ To address this challenge, our work introduces the **ECG-DiReNet** (ECG Diagnosi
 
 ## Overview 
 
-<a href="Overview"><img src="./assets/overview.png" alt="Overview" style="width: 80%; margin: 0 auto; display: block;"></a>
+<p align="center">
+  <a href="Overview">
+    <img src="./assets/overview.png" alt="Overview" width="80%"/>
+  </a>
+</p>
 
 This study proposes ECG-DiReNet, a novel three-stage framework to enable the automated, non-invasive diagnosis of atrial substrate status using ECG data. Our paradigm is designed to simulate and enhance the clinical diagnostic workflow:
 
@@ -133,11 +137,11 @@ We also provide **100 PNG images** (50 for normal and 50 for abnormal) for intui
   #plt.savefig('label_sample.png')         # save .png
   plt.show()
 ```
-<center>
+<p align="center">
   <a href="sample"><img src="./assets/sample.png" alt="Sample" width="70%"></a>
   <br>
   <i>Example of generated ECG signals (normal vs. abnormal atrial substrate)</i>
-</center>
+</p>
 
 
 
