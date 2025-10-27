@@ -13,7 +13,7 @@ To address this challenge, our work introduces the **ECG-DiReNet** (ECG Diagnosi
 
 ## Overview 
 
-<a href="Overview"><img src="./assets/overview.png" alt="Overview" style="width: 85%; margin: 0 auto; display: block;"></a>
+<a href="Overview"><img src="./assets/overview.png" alt="Overview" style="width: 80%; margin: 0 auto; display: block;"></a>
 
 This study proposes ECG-DiReNet, a novel three-stage framework to enable the automated, non-invasive diagnosis of atrial substrate status using ECG data. Our paradigm is designed to simulate and enhance the clinical diagnostic workflow:
 
